@@ -3,6 +3,13 @@
 睇自己行緊邊個版：頁面左上角 logo 旁邊有 `v0.x.x`，或者 server 啟動嗰行 log。
 改完 `web/` 前端要 `npm run build`（`npm start` 會自動 build）；改 `lib/`、`server.js` 淨係重啟就得。
 
+## v0.9.0 — 2026-08-20
+- **卡框改「1 AI master + 3 程式染色」**：AI 只出銅框 master，銀/金/紫金由
+  lib/recolor.js 確定性衍生（保留線稿+光影，淨換金屬色相；紫金高光位轉金）
+  — 100% 同形、零 API 費、秒出。解決 AI 鏈式生成走形問題
+- 銅框 master prompt 加辣：厚邊、粗黑 outline、卡通金屬光澤（對治「銀框似草稿」）
+- series 新增 local:'metal' 步驟類型，master 自動追蹤
+
 ## v0.8.1 — 2026-08-20
 - **🕘「啱啱生成」面板**（藍圖 tab 頂）：生成中 job 進度、失敗步驟紅字直接顯示、
   最新生成品縮圖牆（按時間排，撳圖放大）— 唔使再喺資料夾度搵
