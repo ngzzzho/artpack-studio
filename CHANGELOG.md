@@ -3,6 +3,10 @@
 睇自己行緊邊個版：頁面左上角 logo 旁邊有 `v0.x.x`，或者 server 啟動嗰行 log。
 改完 `web/` 前端要 `npm run build`（`npm start` 會自動 build）；改 `lib/`、`server.js` 淨係重啟就得。
 
+## v0.10.3 — 2026-08-20
+- 修自我更新靜默失敗：launchd 環境搵唔到 homebrew npm → 前端 rebuild 一直冇行，
+  造成「版本號新、界面舊」（Emma 發現 ⚡ 掣失蹤）。script 補 PATH + npm 檢查
+
 ## v0.10.2 — 2026-08-20
 - 卡面套裝加「紫金卡底放射紋」（Card_BG_Rays，3:4 全幅）— UI 已埋好 hook，
   生成+出品後紫金卡自動着燈
