@@ -1,0 +1,60 @@
+{
+  "geminiModel": "gemini-3-pro-image-preview",
+  "openaiModel": "gpt-image-2",
+  "falModel": "openai/gpt-image-2",
+  "falEditModel": "",
+  "styles": [
+    {
+      "id": "casual-glossy",
+      "name": "休閒光澤（跟現有素材風格）",
+      "text": "2D casual mobile game art style, bold thick dark outlines, vibrant saturated colors, glossy highlights, smooth vector-like cel shading, clean silhouette, high polish"
+    },
+    {
+      "id": "pixel",
+      "name": "像素風",
+      "text": "retro pixel art game asset, crisp pixels, limited color palette, no anti-aliasing"
+    },
+    {
+      "id": "painterly",
+      "name": "手繪厚塗",
+      "text": "hand-painted stylized game art, soft brush strokes, rich warm lighting"
+    },
+    {
+      "id": "none",
+      "name": "無風格後綴",
+      "text": ""
+    }
+  ],
+  "categories": [
+    {
+      "id": "icon",
+      "name": "道具/Icon",
+      "text": "a single game item icon, centered, front view"
+    },
+    {
+      "id": "reward",
+      "name": "獎勵/寶箱",
+      "text": "a game reward asset, centered"
+    },
+    {
+      "id": "building",
+      "name": "建築",
+      "text": "a cute stylized game building, three-quarter view"
+    },
+    {
+      "id": "character",
+      "name": "角色",
+      "text": "a full-body game character, standing pose, front view"
+    },
+    {
+      "id": "ui",
+      "name": "UI 元件",
+      "text": "a mobile game UI element"
+    },
+    {
+      "id": "free",
+      "name": "自由",
+      "text": ""
+    }
+  ]
+}
