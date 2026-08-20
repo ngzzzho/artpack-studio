@@ -3,6 +3,11 @@
 睇自己行緊邊個版：頁面左上角 logo 旁邊有 `v0.x.x`，或者 server 啟動嗰行 log。
 改完 `web/` 前端要 `npm run build`（`npm start` 會自動 build）；改 `lib/`、`server.js` 淨係重啟就得。
 
+## v0.9.1 — 2026-08-20
+- 卡框 master 改九宮格（S/M 直卡 + L 方卡一套框通用）：裝飾鎖四角、四邊淨色
+- 波徽拆做獨立零件 Frame_Emblem（引擎貼喺框底中間 — 避開九宮格邊中變形死穴）
+- 銀/金/紫金變體自動繼承 master 嘅 ninepatch margins（四級 slices.json 齊）
+
 ## v0.9.0 — 2026-08-20
 - **卡框改「1 AI master + 3 程式染色」**：AI 只出銅框 master，銀/金/紫金由
   lib/recolor.js 確定性衍生（保留線稿+光影，淨換金屬色相；紫金高光位轉金）
