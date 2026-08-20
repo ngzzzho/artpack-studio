@@ -18,6 +18,7 @@ import { removeBackground } from './lib/removebg.js';
 import { BLUEPRINT, CATEGORIES } from './lib/blueprint.js';
 import { STAR_PART_ITEMS, COVERAGE } from './lib/starparts.js';
 import { startSetJob, getJob, listJobs, buildSteps, OUTPUT_PACK, startStarBatch, getStarBatch, stopStarBatch } from './lib/sets.js';
+import { publishToRepo } from './lib/publish.js';
 
 process.chdir(STUDIO_DIR);
 ensureDirs();
@@ -29,6 +30,16 @@ const PORT = Number(process.env.PORT) || 4747;
 if (process.env.ARTPACK_PASSWORD) {
   app.use('*', basicAuth({ username: process.env.ARTPACK_USER || 'emma', password: process.env.ARTPACK_PASSWORD }));
 }
+
+// ---------- publish（批准出品 → copy 入 game repo + manifest + git push）----------
+app.post('/api/publish', async (c) => {
+  try {
+    const r = await publishToRepo();
+    return c.json({ ok: true, ...r });
+  } catch (e) {
+    return c.json({ ok: false, error: String(e?.message || e) }, 500);
+  }
+});
 
 // ---------- export zip（雲端用：一掣攞晒生成品返本地）----------
 app.get('/api/export.zip', async (c) => {

@@ -174,7 +174,14 @@ export default function App() {
               notify('更新請求發唔出');
             }
           }}>🔄</button>
-          <a className="ghost sm" href="/api/export.zip" title="下載生成品 zip（Football Pack）" style={{ textDecoration: 'none', padding: '6px 10px' }}>⬇️ 出品</a>
+          <button className="ghost sm" title="將 Football Pack 出品入 game repo（copy + manifest + git push）" onClick={async () => {
+            if (!confirm('出品：將 Football Pack 全部生成品 push 入 wordfootball_ui repo？')) return;
+            try {
+              const r = await fetch('/api/publish', { method: 'POST' }).then((x) => x.json());
+              notify(r.ok ? (r.pushed ? `🚀 出品咗 ${r.files} 個檔入 repo` : r.msg) : '唔得：' + r.error);
+            } catch { notify('出品請求發唔出'); }
+          }}>🚀 出品</button>
+          <a className="ghost sm" href="/api/export.zip" title="後備：zip 下載到呢部機" style={{ textDecoration: 'none', padding: '6px 10px' }}>⬇️</a>
           {cfg && (
             <span className="keychips">
               <span className={cfg.keys.gemini ? 'on' : 'off'}>🍌 {cfg.keys.gemini ? '已連接' : '未設定'}</span>

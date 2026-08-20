@@ -3,6 +3,14 @@
 睇自己行緊邊個版：頁面左上角 logo 旁邊有 `v0.x.x`，或者 server 啟動嗰行 log。
 改完 `web/` 前端要 `npm run build`（`npm start` 會自動 build）；改 `lib/`、`server.js` 淨係重啟就得。
 
+## v0.8.0 — 2026-08-20
+- **🚀 出品直達 game repo**：header 個出品掣改為「批准出品」— 將 Football Pack 全部生成品
+  copy 入 wordfootball_ui repo 嘅 assets/skin/generated/、重建 skin_manifest.json
+  （每件連 ninepatch margins），自動 git commit + push。UI session pull 就攞到做合併
+- 需要 Mac 端 .env 設 PUBLISH_REPO=<wordfootball_ui clone 路徑>（一次性）
+- ⬇️ zip 降級做後備細掣（想落 own 機先用）
+- 位置角章藍圖改 v6 規格：四色 icon 方章（GK手套/DEF盾/MID雙箭/FWD前箭），256 畫布，下半留空帶俾引擎壓字
+
 ## v0.7.0 — 2026-08-20
 - **🔄 自我更新掣**（header）：任何裝置撳一下 → Mac 自動 git pull + install + build + 重啟，
   約一分鐘後 refresh 就係新版。更新 log 喺 Mac 嘅 /tmp/artpack-update.log
