@@ -165,6 +165,7 @@ export default function App() {
           <button className={tab === 'free' ? 'sel' : ''} onClick={() => setTab('free')}>🖌️ 自由生成</button>
         </nav>
         <div className="header-right">
+          <a className="ghost sm" href="/api/export.zip" title="下載生成品 zip（Football Pack）" style={{ textDecoration: 'none', padding: '6px 10px' }}>⬇️ 出品</a>
           {cfg && (
             <span className="keychips">
               <span className={cfg.keys.gemini ? 'on' : 'off'}>🍌 {cfg.keys.gemini ? '已連接' : '未設定'}</span>

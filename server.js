@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { Hono } from 'hono';
+import { basicAuth } from 'hono/basic-auth';
 import { serve } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
 import sharp from 'sharp';
@@ -23,6 +24,34 @@ ensureDirs();
 
 const app = new Hono();
 const PORT = Number(process.env.PORT) || 4747;
+
+// 雲端部署：設定 ARTPACK_PASSWORD 就全站鎖密碼（瀏覽器原生登入框，iPad 都用到）
+if (process.env.ARTPACK_PASSWORD) {
+  app.use('*', basicAuth({ username: process.env.ARTPACK_USER || 'emma', password: process.env.ARTPACK_PASSWORD }));
+}
+
+// ---------- export zip（雲端用：一掣攞晒生成品返本地）----------
+app.get('/api/export.zip', async (c) => {
+  const { ZipArchive } = await import('archiver');
+  const what = c.req.query('what') || 'football';
+  const dirs = [];
+  if (what === 'football' || what === 'all') dirs.push('Football Pack');
+  if (what === 'generated' || what === 'all') dirs.push('Generated');
+  if (what === 'starparts' || what === 'all') dirs.push('StarParts-Godot');
+  const archive = new ZipArchive({ zlib: { level: 6 } });
+  for (const d of dirs) {
+    const abs = path.join(ROOT, d);
+    if (fs.existsSync(abs)) archive.directory(abs, d);
+  }
+  archive.finalize();
+  const { Readable } = await import('node:stream');
+  return new Response(Readable.toWeb(archive), {
+    headers: {
+      'Content-Type': 'application/zip',
+      'Content-Disposition': `attachment; filename="artpack-${what}-${new Date().toISOString().slice(0, 10)}.zip"`
+    }
+  });
+});
 
 // ---------- library ----------
 app.get('/api/packs', (c) => c.json({ root: path.basename(ROOT), dirs: listDirs() }));

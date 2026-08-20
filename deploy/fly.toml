@@ -1,0 +1,21 @@
+# Fly.io 設定樣板 — app 名同 region 由 fly launch 補上
+app = "artpack-studio"
+primary_region = "hkg"
+
+[build]
+  dockerfile = "studio/deploy/Dockerfile"
+
+[mounts]
+  source = "artpack_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"

@@ -3,6 +3,12 @@
 睇自己行緊邊個版：頁面左上角 logo 旁邊有 `v0.x.x`，或者 server 啟動嗰行 log。
 改完 `web/` 前端要 `npm run build`（`npm start` 會自動 build）；改 `lib/`、`server.js` 淨係重啟就得。
 
+## v0.6.0 — 2026-08-20
+- **上雲套件**（deploy/）：Dockerfile + entrypoint（素材庫 seed 落 volume）+ fly.toml + DEPLOY.md 教學
+- **密碼保護**：設 ARTPACK_PASSWORD 環境變數即全站上鎖（瀏覽器原生登入，iPad 適用）
+- **⬇️ 出品 zip**：header 一掣下載 Football Pack；/api/export.zip?what=generated|starparts|all
+- ARTPACK_ROOT 環境變數：素材庫位置可指定（雲端用 /data volume）
+
 ## v0.5.1 — 2026-08-20
 - Port 自動閃避：4747 被霸佔就自動試 4748…4757，唔會再 EADDRINUSE 死機
 - ARTPACK_OPEN=1 時起機自動開瀏覽器
