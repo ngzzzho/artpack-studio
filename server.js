@@ -53,6 +53,21 @@ app.get('/api/export.zip', async (c) => {
   });
 });
 
+// ---------- self update（🔄 掣：pull → install → build → 自動重啟）----------
+app.post('/api/update', async (c) => {
+  if (process.platform === 'win32') {
+    return c.json({ ok: false, error: 'Windows 本機版請手動 git pull（呢個功能係俾 Mac 常駐版用）' }, 400);
+  }
+  const { exec } = await import('node:child_process');
+  setTimeout(() => {
+    exec('sh deploy/self-update.sh >> /tmp/artpack-update.log 2>&1', { cwd: STUDIO_DIR }, (err) => {
+      // 無論成敗都 exit — launchd KeepAlive 會翻生；失敗詳情喺 /tmp/artpack-update.log
+      process.exit(err ? 1 : 0);
+    });
+  }, 200);
+  return c.json({ ok: true, msg: '更新緊，約一分鐘後 refresh' });
+});
+
 // ---------- library ----------
 app.get('/api/packs', (c) => c.json({ root: path.basename(ROOT), dirs: listDirs() }));
 

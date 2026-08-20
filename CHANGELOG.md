@@ -3,6 +3,11 @@
 睇自己行緊邊個版：頁面左上角 logo 旁邊有 `v0.x.x`，或者 server 啟動嗰行 log。
 改完 `web/` 前端要 `npm run build`（`npm start` 會自動 build）；改 `lib/`、`server.js` 淨係重啟就得。
 
+## v0.7.0 — 2026-08-20
+- **🔄 自我更新掣**（header）：任何裝置撳一下 → Mac 自動 git pull + install + build + 重啟，
+  約一分鐘後 refresh 就係新版。更新 log 喺 Mac 嘅 /tmp/artpack-update.log
+- 成條更新鏈自此全自動：同 Claude 講改乜 → push repo → 撳 🔄 → 完
+
 ## v0.6.0 — 2026-08-20
 - **上雲套件**（deploy/）：Dockerfile + entrypoint（素材庫 seed 落 volume）+ fly.toml + DEPLOY.md 教學
 - **密碼保護**：設 ARTPACK_PASSWORD 環境變數即全站上鎖（瀏覽器原生登入，iPad 適用）

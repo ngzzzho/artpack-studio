@@ -165,6 +165,15 @@ export default function App() {
           <button className={tab === 'free' ? 'sel' : ''} onClick={() => setTab('free')}>🖌️ 自由生成</button>
         </nav>
         <div className="header-right">
+          <button className="ghost sm" title="拉最新版並重啟（約一分鐘）" onClick={async () => {
+            if (!confirm('更新 studio 去最新版？會斷線約一分鐘。')) return;
+            try {
+              const r = await fetch('/api/update', { method: 'POST' }).then((x) => x.json());
+              notify(r.ok ? '更新緊… 一分鐘後 refresh 呢頁' : '唔得：' + r.error);
+            } catch {
+              notify('更新請求發唔出');
+            }
+          }}>🔄</button>
           <a className="ghost sm" href="/api/export.zip" title="下載生成品 zip（Football Pack）" style={{ textDecoration: 'none', padding: '6px 10px' }}>⬇️ 出品</a>
           {cfg && (
             <span className="keychips">
