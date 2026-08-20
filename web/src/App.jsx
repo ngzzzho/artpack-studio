@@ -40,6 +40,27 @@ function perImageCost(provider, tier, cfg) {
 }
 
 
+function CatBatchButton({ cat, cfg, mock, notify }) {
+  const [busy, setBusy] = useState(false);
+  const go = async () => {
+    if (busy) return;
+    try {
+      const est = await api('/api/batch-cat', { cat, dryRun: true });
+      if (!est.count) return notify('呢類全部生成晒');
+      const provider = pickDefaultProvider(cfg, mock);
+      const cost = (est.aiSteps * perImageCost(provider, 'std', cfg)).toFixed(2);
+      if (!confirm(`一鍵生成「${cat}」未做嘅 ${est.count} 項？AI 出圖 ${est.aiSteps} 張，約 US$${cost}（${PROVIDER_META[provider].name} · 標準）`)) return;
+      setBusy(true);
+      await api('/api/batch-cat', { cat, provider, tier: 'std' });
+      notify('🎨 批量生成開始 — 上面「啱啱生成」面板眛進度');
+    } catch (e) {
+      notify('唔得：' + e.message);
+    }
+    setBusy(false);
+  };
+  return <button className="ghost sm" disabled={busy} onClick={go}>{busy ? '⏳' : '⚡ 一鍵生成'}</button>;
+}
+
 function PublishButton() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
@@ -286,7 +307,8 @@ export default function App() {
             </div>
             {bp && bp.categories.map((cat) => (
               <div key={cat} className="card">
-                <div className="gridhead">{cat} <span className="hint">（{bp.items.filter((i) => i.cat === cat && i.done).length}/{bp.items.filter((i) => i.cat === cat).length} 完成）</span></div>
+                <div className="gridhead" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>{cat} <span className="hint">（{bp.items.filter((i) => i.cat === cat && i.done).length}/{bp.items.filter((i) => i.cat === cat).length} 完成）</span>
+                  <CatBatchButton cat={cat} cfg={cfg} mock={bp.mock} notify={notify} /></div>
                 <div className="bpgrid">
                   {bp.items.filter((i) => i.cat === cat).map((item) => (
                     <div key={item.id} className={'bpitem' + (item.done ? ' done' : '')}>

@@ -31,6 +31,33 @@ if (process.env.ARTPACK_PASSWORD) {
   app.use('*', basicAuth({ username: process.env.ARTPACK_USER || 'emma', password: process.env.ARTPACK_PASSWORD }));
 }
 
+// ---------- batch by category（一鍵生成成類未做嘅項目）----------
+const bpItemDone = (it) => {
+  const outCat = it.outCat || it.cat;
+  const outDir = it.kind === 'single'
+    ? path.join(ROOT, OUTPUT_PACK, outCat)
+    : path.join(ROOT, OUTPUT_PACK, outCat, it.folder || it.file);
+  try {
+    return it.kind === 'single'
+      ? fs.existsSync(path.join(outDir, `${it.file}.png`))
+      : fs.existsSync(outDir) && fs.readdirSync(outDir).some((f) => f.endsWith('.png'));
+  } catch { return false; }
+};
+
+app.post('/api/batch-cat', async (c) => {
+  const { cat, provider, tier, dryRun } = await c.req.json();
+  const items = BLUEPRINT.filter((i) => i.cat === cat && !bpItemDone(i));
+  const aiSteps = items.reduce((n, it) => n + buildSteps(it).filter((st) => !st.local).length, 0);
+  if (dryRun) return c.json({ count: items.length, aiSteps });
+  if (!items.length) return c.json({ error: '呢類全部生成晒 — 想重出請逐項撳「再生成」' }, 400);
+  try {
+    const batch = startStarBatch({ items, provider, tier: tier || 'std' });
+    return c.json({ ok: true, batchId: batch.id, count: items.length });
+  } catch (e) {
+    return c.json({ error: String(e?.message || e) }, 400);
+  }
+});
+
 // ---------- recent（啱啱生成咗啲乜 — 掃 Football Pack 按時間排，重啟都仲喺度）----------
 app.get('/api/recent', (c) => {
   const base = path.join(ROOT, 'Football Pack');
@@ -268,9 +295,10 @@ app.post('/api/generate', async (c) => {
 // ---------- football blueprint & set jobs ----------
 app.get('/api/blueprint', (c) => {
   const items = BLUEPRINT.map((it) => {
+    const outCat = it.outCat || it.cat;
     const outDir = it.kind === 'single'
-      ? path.join(ROOT, OUTPUT_PACK, it.cat)
-      : path.join(ROOT, OUTPUT_PACK, it.cat, it.folder || it.file);
+      ? path.join(ROOT, OUTPUT_PACK, outCat)
+      : path.join(ROOT, OUTPUT_PACK, outCat, it.folder || it.file);
     let done = false;
     try {
       done = it.kind === 'single'
