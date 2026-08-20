@@ -46,7 +46,7 @@ const bpItemDone = (it) => {
 
 app.post('/api/batch-cat', async (c) => {
   const { cat, provider, tier, dryRun } = await c.req.json();
-  const items = BLUEPRINT.filter((i) => i.cat === cat && !bpItemDone(i));
+  const items = BLUEPRINT.filter((i) => i.cat === cat && !i.optional && !bpItemDone(i)); // optional = 現貨已覆蓋，一鍵唔燒
   const aiSteps = items.reduce((n, it) => n + buildSteps(it).filter((st) => !st.local).length, 0);
   if (dryRun) return c.json({ count: items.length, aiSteps });
   if (!items.length) return c.json({ error: '呢類全部生成晒 — 想重出請逐項撳「再生成」' }, 400);

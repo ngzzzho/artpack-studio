@@ -315,6 +315,7 @@ export default function App() {
                       <div className="bptitle">
                         {item.done ? '✅ ' : ''}{item.name}
                         <span className="kind">{KIND_LABEL[item.kind]}</span>
+                        {item.optional && <span className="kind" style={{ background: '#2e7d32', color: '#fff' }}>♻️ 現貨已覆蓋·AI升級可選</span>}
                       </div>
                       <div className="bpparts">{item.steps.map((s) => s.file).join(' · ')}</div>
                       <div className="bpactions">

@@ -3,6 +3,12 @@
 睇自己行緊邊個版：頁面左上角 logo 旁邊有 `v0.x.x`，或者 server 啟動嗰行 log。
 改完 `web/` 前端要 `npm run build`（`npm start` 會自動 build）；改 `lib/`、`server.js` 淨係重啟就得。
 
+## v0.10.1 — 2026-08-20
+- **現貨優先 audit**（Emma 抓漏）：卡面套裝 9 項標「♻️ 現貨已覆蓋」—
+  電池格=Slider_Batteary、slot框=BorderFrame、chip底=Label/程式畫、
+  角章+屬性icon=現貨白glyph+程式色底。一鍵生成自動跳過呢啲，唔再默認燒錢
+- AI 升級版（足球味 icon 等）要逐項手動生成先出
+
 ## v0.10.0 — 2026-08-20
 - **「卡面套裝」類別**：所有卡片零件合併一類（卡框+波徽/六屬性+GK icon/位置角章/
   chip 底/必殺+裝備 slot/體力格/MAX 章，共 10 項）— 已批准嘅卡框輸出路徑唔郁
