@@ -40,6 +40,30 @@ function perImageCost(provider, tier, cfg) {
 }
 
 
+function PublishButton() {
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState('');
+  const go = async () => {
+    if (busy) return;
+    if (!confirm('出品：將 Football Pack 全部生成品 push 入 wordfootball_ui repo？')) return;
+    setBusy(true);
+    setMsg('⏳ 出品緊… copy + git push，可能要成分鐘，唔好關頁');
+    try {
+      const r = await fetch('/api/publish', { method: 'POST' }).then((x) => x.json());
+      setMsg(r.ok ? (r.pushed ? `✅ 出品咗 ${r.files} 個檔入 repo` : `ℹ️ ${r.msg}`) : `⚠️ ${r.error}`);
+    } catch (e) {
+      setMsg('⚠️ 請求失敗：' + (e?.message || e));
+    }
+    setBusy(false);
+  };
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+      <button className="ghost sm" disabled={busy} onClick={go}>{busy ? '⏳ 出品緊…' : '🚀 出品'}</button>
+      {msg && <span className="hint" style={{ maxWidth: 280, fontSize: 12 }}>{msg}</span>}
+    </span>
+  );
+}
+
 function RecentPanel({ onPreview }) {
   const [jobs, setJobs] = useState([]);
   const [files, setFiles] = useState([]);
@@ -214,13 +238,7 @@ export default function App() {
               notify('更新請求發唔出');
             }
           }}>🔄</button>
-          <button className="ghost sm" title="將 Football Pack 出品入 game repo（copy + manifest + git push）" onClick={async () => {
-            if (!confirm('出品：將 Football Pack 全部生成品 push 入 wordfootball_ui repo？')) return;
-            try {
-              const r = await fetch('/api/publish', { method: 'POST' }).then((x) => x.json());
-              notify(r.ok ? (r.pushed ? `🚀 出品咗 ${r.files} 個檔入 repo` : r.msg) : '唔得：' + r.error);
-            } catch { notify('出品請求發唔出'); }
-          }}>🚀 出品</button>
+          <PublishButton />
           <a className="ghost sm" href="/api/export.zip" title="後備：zip 下載到呢部機" style={{ textDecoration: 'none', padding: '6px 10px' }}>⬇️</a>
           {cfg && (
             <span className="keychips">
