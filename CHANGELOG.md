@@ -3,6 +3,10 @@
 睇自己行緊邊個版：頁面左上角 logo 旁邊有 `v0.x.x`，或者 server 啟動嗰行 log。
 改完 `web/` 前端要 `npm run build`（`npm start` 會自動 build）；改 `lib/`、`server.js` 淨係重啟就得。
 
+## v0.10.4 — 2026-08-20
+- 卡面金屬箔底 ×4 級（FUT 質感嗰浸）：1 AI bronze master + 銀/金/紫金程式染色，
+  接線後成張卡面就係金屬材質（取代奶白紙底）
+
 ## v0.10.3 — 2026-08-20
 - 修自我更新靜默失敗：launchd 環境搵唔到 homebrew npm → 前端 rebuild 一直冇行，
   造成「版本號新、界面舊」（Emma 發現 ⚡ 掣失蹤）。script 補 PATH + npm 檢查
