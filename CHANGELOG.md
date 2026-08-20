@@ -3,6 +3,11 @@
 睇自己行緊邊個版：頁面左上角 logo 旁邊有 `v0.x.x`，或者 server 啟動嗰行 log。
 改完 `web/` 前端要 `npm run build`（`npm start` 會自動 build）；改 `lib/`、`server.js` 淨係重啟就得。
 
+## v0.8.1 — 2026-08-20
+- **🕘「啱啱生成」面板**（藍圖 tab 頂）：生成中 job 進度、失敗步驟紅字直接顯示、
+  最新生成品縮圖牆（按時間排，撳圖放大）— 唔使再喺資料夾度搵
+- 每 4 秒自動刷新，生成緊嘅嘢一完成就彈出嚟
+
 ## v0.8.0 — 2026-08-20
 - **🚀 出品直達 game repo**：header 個出品掣改為「批准出品」— 將 Football Pack 全部生成品
   copy 入 wordfootball_ui repo 嘅 assets/skin/generated/、重建 skin_manifest.json

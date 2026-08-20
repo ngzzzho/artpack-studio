@@ -39,6 +39,46 @@ function perImageCost(provider, tier, cfg) {
   return 0;
 }
 
+
+function RecentPanel({ onPreview }) {
+  const [jobs, setJobs] = useState([]);
+  const [files, setFiles] = useState([]);
+  const load = () => {
+    api('/api/set-jobs').then((d) => setJobs(d.jobs || [])).catch(() => {});
+    api('/api/recent').then((d) => setFiles(d.files || [])).catch(() => {});
+  };
+  useEffect(() => {
+    load();
+    const t = setInterval(load, 4000);
+    return () => clearInterval(t);
+  }, []);
+  const running = jobs.filter((j) => !j.done);
+  const failed = jobs.filter((j) => j.done && (j.error || j.steps.some((st) => st.status === 'error')));
+  if (!running.length && !failed.length && !files.length) return null;
+  return (
+    <div className="card">
+      <div className="gridhead">🕘 啱啱生成</div>
+      {running.map((j) => (
+        <div key={j.id} className="hint" style={{ padding: '4px 0' }}>
+          🎨 生成緊：{j.itemName}（{j.steps.filter((st) => st.status === 'done').length}/{j.steps.length} 步）
+        </div>
+      ))}
+      {failed.map((j) => (
+        <div key={j.id} style={{ padding: '4px 0', color: '#e65c4f', fontSize: 13 }}>
+          ⚠️ {j.itemName} 有步驟失敗：{(j.error || j.steps.find((st) => st.error)?.error || '').slice(0, 160)}
+        </div>
+      ))}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+        {files.slice(0, 24).map((f) => (
+          <img key={f.path} className="checker" style={{ width: 72, height: 72, objectFit: 'contain', cursor: 'pointer' }}
+            src={`/thumb/96/${enc(f.path)}?t=${Math.floor(f.mtime)}`} title={f.path} onClick={() => onPreview(f.path)} alt="" />
+        ))}
+      </div>
+      {files.length > 0 && <div className="hint" style={{ marginTop: 6 }}>最新排先 · 撳圖放大 · 滿意就撳右上 🚀 出品</div>}
+    </div>
+  );
+}
+
 export default function App() {
   const [tab, setTab] = useState('blueprint');
   const [cfg, setCfg] = useState(null);
@@ -221,6 +261,7 @@ export default function App() {
 
         {tab === 'blueprint' && (
           <section className="content">
+            <RecentPanel onPreview={setLightbox} />
             <div className="card intro">
               <b>小朋友足球遊戲素材藍圖</b> — 每個項目撳「生成」就會出<b>成套部件</b>：建築有 3 級＋自動陰影、寶箱有 4 個狀態、角色部件有「頭上定位版＋淨部件版＋染色灰階版」，全部跟返你現有 pack 嘅檔案結構存入 <code>Football Pack/</code>，並自動攞相關現有素材做風格參考。
               <div className="hint" style={{ marginTop: 6 }}>球星部件係「特徵描述」生成（唔會send真人名俾AI）；如果隻game會商業上架，記住真人肖像要另外處理授權。</div>

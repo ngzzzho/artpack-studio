@@ -31,6 +31,28 @@ if (process.env.ARTPACK_PASSWORD) {
   app.use('*', basicAuth({ username: process.env.ARTPACK_USER || 'emma', password: process.env.ARTPACK_PASSWORD }));
 }
 
+// ---------- recent（啱啱生成咗啲乜 — 掃 Football Pack 按時間排，重啟都仲喺度）----------
+app.get('/api/recent', (c) => {
+  const base = path.join(ROOT, 'Football Pack');
+  const out = [];
+  const visit = (dir, rel) => {
+    let entries;
+    try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+    for (const e of entries) {
+      if (e.name.startsWith('.')) continue;
+      const abs = path.join(dir, e.name);
+      const r = rel ? `${rel}/${e.name}` : e.name;
+      if (e.isDirectory()) visit(abs, r);
+      else if (e.name.endsWith('.png')) {
+        try { out.push({ path: 'Football Pack/' + r, mtime: fs.statSync(abs).mtimeMs }); } catch {}
+      }
+    }
+  };
+  visit(base, '');
+  out.sort((a, b) => b.mtime - a.mtime);
+  return c.json({ files: out.slice(0, 60) });
+});
+
 // ---------- publish（批准出品 → copy 入 game repo + manifest + git push）----------
 app.post('/api/publish', async (c) => {
   try {
